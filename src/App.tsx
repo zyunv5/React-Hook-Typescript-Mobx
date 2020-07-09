@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { useState } from "react";
+import TodoList from "./TodoList";
+import { todoItemInterface } from "./types";
 
 function App() {
+  const [todos, setTodos] = useState<todoItemInterface[]>([
+    { id: 0, text: "clean house", completed: false },
+    { id: 1, text: "cook dinner", completed: false },
+  ]);
+
+  let toggleTodo = (id: number): void => {
+    let index = todos.findIndex((item) => {
+      return item.id === id;
+    });
+    let newTodos = todos.map((todo, currentIndex) => {
+      if (currentIndex === index) {
+        return { ...todo, completed: !todo.completed };
+      } else {
+        return todo;
+      }
+    });
+
+    setTodos(newTodos);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h6>React hooks example</h6>
+      <TodoList todoList={todos} toggleTodo={toggleTodo} />
     </div>
   );
 }
